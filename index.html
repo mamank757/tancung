@@ -5,21 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#333" />
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-web-app-capable" content="yes">
-    <meta name="apple-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="format-detection" content="telephone=no, date=no, email=no, address=no">
- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <title>LCS, Tanggal, Nama Penyuluh</title>
 
     <style>
         /* CONTAINER UNTUK TOMBOL DI KANAN BAWAH */
         .floating-container {
             position: fixed;
-            bottom: 30px; /* Posisi dari bawah */
-            right: 20px;  /* Posisi dari kanan */
+            bottom: 30px; 
+            right: 20px;  
             display: flex;
-            flex-direction: column; /* Susun vertikal ke atas */
-            gap: 15px;    /* Jarak antar tombol */
+            flex-direction: column; 
+            gap: 15px;    
             z-index: 9999;
         }
 
@@ -36,13 +36,13 @@
             transition: transform 0.3s ease, background-color 0.3s ease;
         }
 
-         .floating-home {
-            background-color: #11807e; /* Hijau */
+        .floating-home {
+            background-color: #11807e; 
             font-size: 24px;
         }
 
         .floating-tiktok {
-            background-color: #000000; /* Hitam TikTok */
+            background-color: #000000; 
             font-size: 24px;
         }
 
@@ -50,14 +50,12 @@
             transform: scale(1.15) translateY(-5px);
         }
 
-/* 3. Menghilangkan tombol saat Print/PDF */
-@media print {
-    .floating-container {
-        display: none !important;
-    }
-}
+        @media print {
+            .floating-container {
+                display: none !important;
+            }
+        }
 
-        /* --- KODE CSS ANDA SEBELUMNYA --- */
         .col-eviden { text-align: center; }
         .col-konten textarea { font-size: 11px; }
         .col-eviden input[type="file"] { display: block; margin: 0 auto; }
@@ -303,15 +301,27 @@
 
         <label>NAMA PENYULUH</label>
         <span>:</span>
-        <input type="text" id="id_nama" placeholder="Cth: ABDUL RAHMAN, SP">
+        <select id="id_nama">
+            <option value="">Pilih Nama Penyuluh</option>
+            <option>USMAN, S.Pt</option>
+            <option>MUHAMMAD ASRI, S.P</option>
+            <option>ANDI HIKMAH, S.P</option>
+            <option>INDRAWATI HUSNI, S.P., M.Si</option>
+            <option>SARINTANG, S.Pt</option>
+            <option>MUHAMMAD ARIF, S.P</option>
+            <option>MUHAMMAD ALWI, S.P</option>
+            <option>SAHABUDDIN</option>
+            <option>RINI ANDRIYANI J, S.P</option>
+            <option>AMIN NURDIN, S.P</option>
+        </select>
 
-        <label>NIP.</label>
+        <label>NIP. <span class="no-print">(otomatis)</span></label>
         <span>:</span>
-        <input type="text" id="id_nip" placeholder="Cth: 199009202020121001">
+        <input type="text" id="id_nip" readonly placeholder="Pilih nama di atas">
 
-        <label>WILBIN/WKPP</label>
+        <label>WILBIN/WKPP <span class="no-print">(otomatis)</span></label>
         <span>:</span>
-        <input type="text" id="id_wilayah" placeholder="Cth: DESA MANURUNG">
+        <input type="text" id="id_wilayah" readonly placeholder="Pilih nama di atas">
     </div>
 
     <table>
@@ -346,7 +356,32 @@
 </footer>
 
 <script>
-/* JAVASCRIPT ANDA TETAP SAMA SEPERTI SEBELUMNYA */
+// DATA PENYULUH UNTUK DROPDOWN
+const dataPenyuluh = {
+    "USMAN, S.Pt": { nip: "197808062010011007", wilayah: "KELURAHAN BARU TANCUNG" },
+    "MUHAMMAD ASRI, S.P": { nip: "196707121999031006", wilayah: "DESA PAKKANNA & DESA WAJORIAJA" },
+    "ANDI HIKMAH, S.P": { nip: "197712202005022003", wilayah: "DESA MARIO & UJUNG BARU" },
+    "INDRAWATI HUSNI, S.P., M.Si": { nip: "198005102011012001", wilayah: "KELURAHAN PINCENG PUTE & DESA LOWA" },
+    "SARINTANG, S.Pt": { nip: "197406082010012003", wilayah: "DESA UJUNGNGE & DESA PAJALELE" },
+    "MUHAMMAD ARIF, S.P": { nip: "197211302014061001", wilayah: "DESA WEWANGREWU & DESA PALIPPU" },
+    "MUHAMMAD ALWI, S.P": { nip: "197206092021211001", wilayah: "DESA TONRALIPUE" },
+    "SAHABUDDIN": { nip: "196812312021211028", wilayah: "DESA INALIPUE" },
+    "RINI ANDRIYANI J, S.P": { nip: "198910212024212001", wilayah: "KELURAHAN TANCUNG" },
+    "AMIN NURDIN, S.P": { nip: "197509032025211005", wilayah: "DESA NEPO & DESA WAETUWO" }
+};
+
+// Event Listener untuk Update NIP dan Wilayah secara Otomatis
+document.getElementById("id_nama").addEventListener("change", function() {
+    const data = dataPenyuluh[this.value];
+    if(data) {
+        document.getElementById("id_nip").value = data.nip;
+        document.getElementById("id_wilayah").value = data.wilayah;
+    } else {
+        document.getElementById("id_nip").value = "";
+        document.getElementById("id_wilayah").value = "";
+    }
+});
+
 let daftarJudulGlobal = [];
 
 async function sinkronisasiJudul() {
@@ -372,7 +407,6 @@ function isiOpsiSelect(selectElement) {
 
 let count = 0;
 const tableBody = document.getElementById('tableBody');
-const inputNama = document.getElementById('id_nama');
 
 function autoResize(textarea) {
     textarea.style.height = 'auto';
@@ -456,7 +490,7 @@ function pv(input, id) {
 }
 
 function cetakLaporan() {
-    const namaVal = inputNama.value.trim() || "Nama Penyuluh";
+    const namaVal = document.getElementById("id_nama").value || "Nama Penyuluh";
     const d = new Date();
     const tgl = `${String(d.getDate()).padStart(2, '0')}-${String(d.getMonth() + 1).padStart(2, '0')}-${d.getFullYear()}`;
     document.title = `LCS, ${tgl}, ${namaVal}`;
